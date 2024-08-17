@@ -34,6 +34,9 @@ fn main() {
 
     let result = return_multiple();
     println!("a: {} b: {}", result.0, result.1);
+
+    loop_fn();
+    for_fn();
 }
 
 fn another_function(x: i32) {
@@ -50,4 +53,24 @@ fn plus_two(x: i32) -> i32 {
 
 fn return_multiple() -> (i32, char) {
     return (1, 'c');
+}
+
+fn loop_fn() {
+    let mut counter = 0;
+    let result = loop {
+        counter += 1;
+        if counter == 10 {
+            break counter * 2;
+        }
+    };
+
+    println!("The result is {result}");
+}
+
+fn for_fn() {
+    let a = [10, 20, 30];
+    for element in a {
+        print!("{element} ");
+    }
+    println!();
 }
