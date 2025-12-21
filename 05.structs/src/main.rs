@@ -51,6 +51,7 @@ fn main() {
     // because user, email are the types that implement Move trait
     // println!("{} {} {} {}", user3.username, user3.active, user3.email, user3.sign_in_count);
     println!("user5: {user5:?}");
+    println!("user5 active: {}", user5.id_user_active());
 }
 
 fn build_user(email: String, username: String) -> User {
@@ -59,5 +60,11 @@ fn build_user(email: String, username: String) -> User {
         username,
         email,
         sign_in_count: 1,
+    }
+}
+
+impl User {
+    fn id_user_active(&self) -> bool {
+        self.active
     }
 }
