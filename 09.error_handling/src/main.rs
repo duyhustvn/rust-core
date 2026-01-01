@@ -17,10 +17,11 @@ fn main() {
         },
     };
 
-    let _ = File::open("test_1.txt").unwrap(); // unwrap return value inside the OK, if the Result is
-                                               // an Error, unwrap will call the panic!
+    // unwrap return value inside the OK,
+    // if the Result is an Error, unwrap will call the panic!
+    let _ = File::open("test_1.txt").unwrap();
 
-    // expect return the file handle or call the panic! macro
+    // expect is the same as unwrap but you can custom the error message
     let _ = File::open("test_2.txt").expect("test_2.txt should be included in this project");
 
     let username = match read_username_from_file() {
@@ -49,6 +50,9 @@ fn read_username_from_file() -> Result<String, io::Error> {
 fn read_username_from_file_shorter() -> Result<String, io::Error> {
     let mut username = String::new();
 
+    // ? operator work in almost same way as the match expressions
+    // if value of the Result is an Ok, the value inside Ok get returned
+    // if value is an Err, the Err will be returned
     File::open("username.txt")?.read_to_string(&mut username)?;
 
     Ok(username)
