@@ -1,5 +1,6 @@
 use crate::traits::{NewsArticle, Pair, SocialPost, Summary};
 
+mod lifetime;
 mod traits;
 
 fn main() {
@@ -42,4 +43,9 @@ fn main() {
 
     let string_list_1 = vec!["azvb", "cbca", "xzad", "mbca"];
     println!("largest value: {}", traits::largest(&string_list_1));
+
+    let x = "abc";
+    let y = "ef";
+    let result = lifetime::longest(x, y);
+    println!("longest: {}", result);
 }
