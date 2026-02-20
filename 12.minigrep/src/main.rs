@@ -6,10 +6,10 @@ use std::fs;
 use std::process;
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    dbg!(&args);
+    let env: Vec<String> = env::args().collect();
+    dbg!(&env);
 
-    let config = Config::build(&args).unwrap_or_else(|err| {
+    let config = Config::build(env::args()).unwrap_or_else(|err| {
         eprintln!("{err}");
         process::exit(1);
     });
@@ -46,18 +46,24 @@ struct Config {
 }
 
 impl Config {
-    fn build(args: &Vec<String>) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("Syntax: cargo run -- [search_string] [file]");
-        }
+    fn build(mut args: impl Iterator<Item = String>) -> Result<Config, &'static str> {
+        args.next();
 
-        let query = &args[1];
-        let file_path = &args[2];
+        let query = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a query string"),
+        };
+
+        let file_path = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a file path"),
+        };
+
         let ignore_case = env::var("IGNORE_CASE").is_ok();
 
         Ok(Config {
-            query: String::from(query),
-            file_path: String::from(file_path),
+            query: query,
+            file_path: file_path,
             ignore_case,
         })
     }
