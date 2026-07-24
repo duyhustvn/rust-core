@@ -1,20 +1,20 @@
-enum List {
-    Cons(i32, Box<List>),
-    Nil,
-}
+// enum List {
+//     Cons(i32, Box<List>),
+//     Nil,
+// }
 
-impl fmt::Display for List {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Cons(val, next) => write!(f, "{} -> {}", val, next),
-            Nil => write!(f, "Nil"),
-        }
-    }
-}
+// impl fmt::Display for List {
+//     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+//         match self {
+//             Cons(val, next) => write!(f, "{} -> {}", val, next),
+//             Nil => write!(f, "Nil"),
+//         }
+//     }
+// }
 
 use core::fmt;
 
-use crate::List::{Cons, Nil};
+// use crate::List::{Cons, Nil};
 
 // The MyBox type is a tuple struct with one element of type T.
 // The MyBox::new function takes one parameter of type T and returns a MyBox instance that holds the value passed in.
@@ -48,9 +48,17 @@ impl Drop for CustomSmartPointer {
     }
 }
 
+enum LinkedList {
+    Cons(i32, Rc<LinkedList>),
+    Nil,
+}
+
+use crate::LinkedList::{Cons, Nil};
+use std::rc::Rc;
+
 fn main() {
-    let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
-    println!("list: {list}");
+    // let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
+    // println!("list: {list}");
 
     let x = 5;
     let y = MyBox::new(5);
@@ -69,4 +77,14 @@ fn main() {
     };
 
     println!("CustomSmartPointer created");
+
+    let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
+    println!("count after creating a = {}", Rc::strong_count(&a));
+    let b = Cons(3, Rc::clone(&a));
+    println!("count after creating b = {}", Rc::strong_count(&a));
+    {
+        let c = Cons(4, Rc::clone(&a));
+        println!("count after creating c = {}", Rc::strong_count(&a));
+    }
+    println!("count after c goes out of scope = {}", Rc::strong_count(&a));
 }
